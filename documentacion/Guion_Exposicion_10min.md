@@ -1,6 +1,6 @@
 # Guion de exposición (≈10 min) — Haiku R1 Beta 6 en VirtualBox
 
-Sin diapositivas: se comparte pantalla (VirtualBox con Haiku a pantalla grande). Dos expositores: **A** (tú) y **B** (compañero). Cada uno con su propia VM importada del mismo OVA.
+Sin diapositivas: se comparte pantalla (VirtualBox con Haiku a pantalla grande). Dos expositores: **Gianluck** y **Hernán**. Cada uno con su propia VM importada del mismo OVA. Cada uno comparte la pantalla de su PC cuando le toca.
 
 ## Frase de propósito (criterio 1 — dila al inicio y ponla en el Resumen del informe)
 
@@ -15,12 +15,12 @@ Sin diapositivas: se comparte pantalla (VirtualBox con Haiku a pantalla grande).
 
 | Min | Quién | Contenido |
 |---|---|---|
-| 0:00–1:30 | A | Propósito, usuarios, caso de uso (frase de arriba). Qué es Haiku: núcleo propio, BFS, paquetes HPKG, POSIX. |
-| 1:30–4:00 | A | Instalación y configuración: mostrar **Configuración de la VM** en VirtualBox. Explicar cada decisión (ver abajo). Mencionar que se instaló desde ISO, DriveSetup, BFS, y que se exportó un OVA para repetirlo. |
-| 4:00–5:30 | A | Herramientas con `pkgman`: mostrar `git version`, `python3.14 --version`, `javac -version`; abrir Genio. |
-| 5:30–7:00 | A | Demo Python y Java (resultados esperados 15 y 20). Servidor HTTP y abrir `http://127.0.0.1:8080/resultado.html` en Windows (perspectiva del cliente). |
-| 7:00–9:00 | A + B | Demo Git remoto entre las dos VMs (ver sección siguiente). |
-| 9:00–10:00 | B | Limitaciones y conclusión. Abrir preguntas. |
+| 0:00–1:30 | Gianluck | Propósito, usuarios y caso de uso (frase de arriba). Qué es Haiku. |
+| 1:30–3:30 | Gianluck | Configuración de la VM: Configuración, Sistema, Pantalla, Almacenamiento y Red con el reenvío de puertos. |
+| 3:30–5:30 | Gianluck | Herramientas con `pkgman`: versiones de Git, Python y Java; abrir Genio. |
+| 5:30–7:00 | Hernán | Demo Python y Java en vivo. Servidor HTTP y abrir `http://127.0.0.1:8080/resultado.html` en Windows. |
+| 7:00–9:00 | Los dos | Git remoto entre las dos VMs (ver sección siguiente). |
+| 9:00–10:00 | Hernán | Limitaciones, conclusión y preguntas. Responde primero quien menos habló. |
 
 ### Decisiones a explicar en 1:30–4:00
 - **4096 MB RAM:** el IDE y el compilador Java necesitan memoria; con menos se vuelve lento.
@@ -43,45 +43,28 @@ python3.14 -m http.server 8000 --bind 0.0.0.0
 En Windows: `http://127.0.0.1:8080/resultado.html` → HTTP 200.
 **Cómo verificas:** resultado esperado = 3×5 = 15 y 4×5 = 20 calculados a mano; HTTP 200 y la línea de registro en la Terminal de Haiku; `git status` limpio.
 
-## Git remoto con dos VMs (a probar ANTES de exponer)
+## Git remoto con dos VMs (repo de ensayo: Gian999/haiku-pruebas)
 
-Las dos VMs están en NAT en equipos distintos, así que **no se ven entre sí**. La opción más simple y robusta es un remoto en Internet (GitHub o Codeberg) que ambos usan:
+Las VMs están en NAT en equipos distintos y no se ven entre sí. Usan un repositorio en Internet. El repo de la entrega (`HernanVilc4/haiku-SOS`) no se toca en los ensayos.
 
-**Preparación (en Windows, una sola vez):**
-1. Crear un repositorio vacío `practica-haiku` en GitHub/Codeberg y dar acceso de escritura al compañero.
-2. Cada uno crea un *token de acceso personal* con permiso de escritura en repos (se usa como contraseña por HTTPS). No lo pongas en pantalla durante la exposición.
-
-**Persona A (en Haiku):**
+Cada uno, una vez, en su Haiku: nombre y correo con `git config --global`, `git config --global credential.helper store`, token clásico con permiso `repo` (se escribe a mano la primera vez) y clonar:
 ```sh
-cd /boot/home/Desarrollo/practica
-git remote add origin https://github.com/USUARIO/practica-haiku.git
-git push -u origin master        # usuario + token como contraseña
+git clone https://github.com/Gian999/haiku-pruebas.git
+cd haiku-pruebas
 ```
 
-**Persona B (en su Haiku):**
-```sh
-cd /boot/home/Desarrollo
-git clone https://github.com/USUARIO/practica-haiku.git
-cd practica-haiku
-git config user.name "Compañero"
-git config user.email "companero@local"
-echo "Cambio de B" >> README.md
-git commit -am "Cambio desde la VM de B"
-git push
-```
+**En la exposición (7:00 a 9:00):**
+1. **Gianluck:** `echo "Ensayo" >> ensayo.txt`, `git add ensayo.txt`, `git commit -m "..."`, `git push`.
+2. **Hernán:** `git pull` y `git log`. Dice en voz alta que ve el commit de Gianluck.
+3. **Hernán:** hace su cambio y `git push`.
+4. **Gianluck:** `git pull` y `git log`.
+5. **Gianluck:** abre en el navegador la página de commits de `github.com/Gian999/haiku-pruebas` y señala los dos nombres. **Esa es la verificación.**
 
-**Persona A, para cerrar el ciclo:**
-```sh
-git pull
-git log --oneline --graph
-```
-Se debe ver el commit de B en la VM de A. **Esa es la verificación**: un commit hecho en una VM aparece en la otra.
+Extra si sobra tiempo: conflicto a propósito. Los dos reemplazan el contenido de `ensayo.txt`, Hernán sube primero, Gianluck recibe el rechazo, hace `git pull`, resuelve las marcas y vuelve a hacer `git push`.
 
-Extra si sobra tiempo (conflicto): ambos editan la misma línea de README, B hace push primero, A recibe el rechazo, hace `git pull`, resuelve y vuelve a hacer push. Muestra que entienden Git y no solo los comandos.
+Plan B si falla Internet: repo local `git init --bare /boot/home/remoto.git`, `git remote add local /boot/home/remoto.git`, `git push local main`.
 
-Notas:
-- Revisar antes que `git push` por HTTPS funciona en Haiku (`pkgman list-repos` y red activa). Si falla la autenticación por HTTPS, probar con SSH (`ssh-keygen` y subir la clave pública a GitHub).
-- Tener un plan B: si falla Internet durante la exposición, hacer el remoto con un repositorio *bare* local (`git init --bare /boot/home/remoto.git; git remote add local /boot/home/remoto.git`) y explicar que con dos máquinas se haría con SSH.
+El detalle paso a paso con clics está en el artifact: https://claude.ai/artifact/9JQckytL6r9YGpdsQV2GEj
 
 ## Preguntas probables y respuestas cortas
 - **¿Haiku es Linux?** No. Núcleo propio (derivado de NewOS), compatible con POSIX, por eso Git y Python funcionan igual.

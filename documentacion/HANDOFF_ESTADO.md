@@ -46,3 +46,32 @@ Completar en VirtualBox la instalación y preparación de Haiku para desarrollo,
 ## Nota para continuar
 
 La VM lista se llama `Haiku-Desarrollo-Listo`. La ventana de VirtualBox puede ejecutarse elevada; las verificaciones también se pueden realizar con `VBoxManage`.
+
+## Actualización 2026-11-25 (noche, hora de Lima)
+
+### Equipo y repos
+- Estudiantes: Gianluck Yhudá Pastor Lovón (`Gian999`) y Jorge Hernan Vilca Apaza (`HernanVilc4`). Curso: Sistemas Operativos. Docente: Fredy Abel Huanca Torres. Institución: UPEU.
+- Repo de la entrega: `HernanVilc4/haiku-SOS` (este). Repo de ensayo de Git remoto: `Gian999/haiku-pruebas`, con Hernán como colaborador.
+- Plan de trabajo y guía de exposición (artifact): https://claude.ai/artifact/9JQckytL6r9YGpdsQV2GEj
+
+### Hecho en esta sesión
+- Informe `Informe_Haiku_VirtualBox.docx` actualizado: nombres, curso, docente, institución y un párrafo de "Propósito y caso de uso" en el Resumen. No se revisó el formato abierto en Word.
+- Guion de 10 minutos con reparto entre Gianluck y Hernán: `documentacion/Guion_Exposicion_10min.md`.
+- Git remoto probado a medias en `Gian999/haiku-pruebas`: llegó a GitHub el commit de Gianluck (22:10) y el de Hernán (22:37). Falta el `git pull` de cada uno para ver el commit del otro.
+- Token guardado en la VM de Gianluck con `credential.helper store` (comprobado: archivo `.git-credentials` de 68 bytes).
+- La hora de la PC estaba 5 horas adelantada respecto a Lima y se corrigió.
+
+### Problema conocido: no instalar Guest Additions
+- `pkgman install virtualbox_guest_additions` deja a Haiku congelado en la pantalla del logo (paquete 6.1.26 frente a VirtualBox 7.2). No hay copiar y pegar entre Windows y la VM; el token se escribe a mano.
+- Recuperación: al arrancar, pulsar Espacio varias veces hasta ver "Haiku Boot Loader", elegir "Select boot volume/state", Enter, Enter, el estado con fecha anterior al "Latest state", luego "Return to main menu" y "Continue booting".
+- Esto hay que repetirlo en cada arranque hasta crear un estado nuevo de paquetes. Se intentó con `nano` (ya instalado) y `htop` (no existe en los repos). Pendiente: instalar un paquete pequeño que no esté instalado, por ejemplo `tree`.
+
+### Pendiente
+1. Fijar el estado de arranque bueno de la VM (o practicar el menú con Espacio).
+2. `git pull` en las dos VMs y ver los dos commits con `git log`; ensayar un conflicto.
+3. Ensayo cronometrado de 10 minutos, meta 9:30.
+4. Revisar con Hernán las pruebas pendientes de la sección anterior (Python con 35 y 40, `index.html`, Java con ventana, reinicio y apagado) y confirmar con el docente si las pidió.
+5. Abrir el informe en Word y revisar el formato.
+
+### Avance frente a la rúbrica (estimación, no nota)
+Aproximadamente 16,75 de 20 (cerca del 84 %): propósito 3/3, instalación 4/4, demostración 5,5/7, dominio 3/4, claridad 1,25/2. Lo más grande que falta es completar y ensayar la demostración de Git remoto.
