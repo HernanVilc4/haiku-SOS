@@ -1,0 +1,10 @@
+# Archivos locales y temporales
+*.vdi
+*.iso
+paquete/*.zip
+qa_*/
+render_*/
+__pycache__/
+*.pyc
+Thumbs.db
+.DS_Store
